@@ -27,7 +27,9 @@ class ProveedorRequest extends FormRequest
             'nombre' => 'required',
             'nit' => 'required|integer',
             'direccion' => 'required',
-            'telefono' => 'required'
+            'telefono' => 'required',
+            'persona_contacto' => 'required',
+            'ciudad' => 'required'
         ];
     }
 }
