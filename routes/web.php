@@ -207,3 +207,5 @@ Route::get('reportes/kardex/{id}/informe',[
 	'uses' => 'ReporteController@informeProducto',
 	'as' => 'reportes.informe'
 ]);
+
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
