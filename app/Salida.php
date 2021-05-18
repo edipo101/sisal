@@ -27,33 +27,28 @@ class Salida extends Model
 	public function destino(){
     	return $this->belongsTo(Destino::class);
     }
+    
     public function almacen(){
         return $this->belongsTo(Almacen::class);
     }
+    
     public function user(){
     	return $this->belongsTo(User::class);
     }
+    
     public function funcionario(){
     	return $this->belongsTo(Funcionario::class);
     }
 
-    // public function mecanico(){
-    // 	return $this->belongsTo(Mecanico::class);
-    // }
-    // public function conductor(){
-    // 	return $this->belongsTo(Conductor::class);
-    // }
-    public function detallesalidas(){
-    	return $this->hasMany(DetalleSalida::class);
+    public function detalles(){
+    	return $this->hasMany(Detalle::class);
     }
 
     public function scopeSearch($query, $buscar){
-        return $query->where('destino_id','LIKE',"%$buscar%")
-                    ->orWhere('mecanico_id','LIKE',"%$buscar%");
+        return $query->where('destino_id','LIKE',"%$buscar%");
     }
 
-    public function setObservacionAttribute($value)
-    {
+    public function setObservacionAttribute($value){
         $this->attributes['observacion']= $value==null ? 'Sin Observaciones' : $value;
     }
 }

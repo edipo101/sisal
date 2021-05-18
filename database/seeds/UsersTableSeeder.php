@@ -15,6 +15,7 @@ class UsersTableSeeder extends Seeder
         	'nombre' => 'Administrador',
         	'nickname' => 'admin',
             'password' => 'S1st3m4s',
+            'estado' => 'A',
             'almacen_id' => 1,
             'remember_token' => str_random(10),
         ]);

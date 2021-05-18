@@ -4,6 +4,7 @@ namespace SIS;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Producto extends Model
 {
@@ -121,6 +122,14 @@ class Producto extends Model
             }
         }
         return $total_new=$total_new+$total;
+    }
+
+    public function getDescripcionAttribute($value){
+        return str_replace("\r\n", "; ", $value);   
+    }
+
+    public function getNombreDescripcionAttribute(){
+        return Str::upper("{$this->nombre}; {$this->descripcion}");
     }
 
 }

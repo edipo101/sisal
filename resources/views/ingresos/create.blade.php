@@ -35,10 +35,20 @@
 </div>
 
 @endsection
+
 @section('css')
 	<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.css') }}">
 @endsection
+
 @section('scripts')
 <script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
 <script src="{{asset('js/script-ingresos.js')}}"></script>
+
+<script type="text/javascript">{{-- 
+$(document).ready(function(){
+	var route = "{{route('roles.index')}}";
+	console.log(route);
+});	
+ --}}
+</script>
 @endsection

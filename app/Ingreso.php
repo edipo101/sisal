@@ -20,25 +20,29 @@ class Ingreso extends Model
 	public function proveedor(){
     	return $this->belongsTo(Proveedor::class);
     }
+
     public function user(){
     	return $this->belongsTo(User::class);
     }
+
     public function almacen(){
         return $this->belongsTo(Almacen::class);
     }
+
     public function destino(){
     	return $this->belongsTo(Destino::class);
     }
-    public function detalleingresos(){
-    	return $this->hasMany(DetalleIngreso::class);
+
+    public function detalles(){
+    	return $this->hasMany(Detalle::class);
     }
+
     public function scopeSearch($query, $buscar){
         return $query->where('orden','LIKE',"%$buscar%")
                     ->orWhere('preventivo','LIKE',"%$buscar%");
     }
 
-    public function setObservacionAttribute($value)
-    {
+    public function setObservacionAttribute($value){
         $this->attributes['observacion']= $value==null ? 'Sin Observaciones' : $value;
     }
 }

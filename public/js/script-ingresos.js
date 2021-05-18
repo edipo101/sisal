@@ -8,6 +8,8 @@ $(function(){
 	var direccion1 = window.location + '/../../';
     // alert('si entro');
     //alert(direccion);
+    
+    //Obtener la cantidad en stock del producto
     $('#producto_id').change(function(e){
         e.preventDefault();
         $("#valoresproducto").removeClass('hidden');
@@ -21,6 +23,7 @@ $(function(){
             $('#cantidad_almacen').val(data);
         });
     });
+    
     $('#precio_ingreso').change(function(){
         var id_item = $('#producto_id').val();
 	var cantidad = $('#cantidad_ingreso').val();
@@ -38,6 +41,7 @@ $(function(){
 	var precio = $('#precio_ingreso').val();
         var route = direccion1 + '/productos/listar/'+ id_item +'/'+cantidad+'/'+precio+'/producto';
         $.get(route,function(data){
+            console.log(data);
             var cantidad = parseFloat($("#cantidad_ingreso").val());
             var precio = $("#precio_ingreso").val();
             var subtotal = cantidad*precio;

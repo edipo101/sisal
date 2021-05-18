@@ -65,7 +65,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<div class="form-group{{ $errors->has('persona_contacto') ? ' has-error' : '' }}">
-			{{ Form::label('persona_contacto', 'Persona de Contacto') }}
+			{{ Form::label('persona_contacto', 'Representante Legal') }}
 			{{ Form::text('persona_contacto',null,['class'=> 'form-control','id' => 'persona_contacto']) }}
 
 			@if ($errors->has('persona_contacto'))

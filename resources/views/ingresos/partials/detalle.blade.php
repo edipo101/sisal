@@ -2,7 +2,13 @@
 <div class="col-md-12">
 	<div class="form-group">
 		{{ Form::label('producto_id', 'Producto') }}
-		{{ Form::select('producto_id',$productos,null,['class'=> 'form-control select','id' => 'producto_id', 'placeholder' => 'Seleccione un Producto']) }}
+		<select class="form-control select" id="producto_id" name="producto_id">
+			<option selected="selected" value="">Seleccione un Producto</option>
+			@foreach($productos as $producto)
+			<option value="{{$producto->id}}">{{$producto->nombre_descripcion}}</option>
+			@endforeach
+		</select>
+		{{-- {{ Form::select('producto_id',$productos,null,['class'=> 'form-control select','id' => 'producto_id', 'placeholder' => 'Seleccione un Producto']) }} --}}
 	</div>
 </div>
 <div class="hidden" id="valoresproducto">
@@ -20,7 +26,7 @@
 	</div>
 	<div class="col-md-3">
 		<div class="form-group">
-			{{ Form::label('precio_ingreso', 'Precio Ingreso') }}
+			{{ Form::label('precio_ingreso', 'Precio Unitario') }}
 			{{ Form::text('precio_ingreso',null,['class'=> 'form-control','id' => 'precio_ingreso']) }}
 		</div>
 	</div>

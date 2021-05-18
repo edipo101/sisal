@@ -105,14 +105,20 @@ class IngresoController extends Controller
     public function create()
     {
         $proveedors = Proveedor::orderBy('nombre','ASC')->pluck('nombre','id');
-        $productos = Producto::orderBy('nombre','ASC')->pluck('nombre','id');
+        // $productos = Producto::orderBy('nombre','ASC')->pluck('nombre','id');
+        $productos = Producto::orderBy('nombre','ASC')->get();
+        // return $productos;
+        // $productos = str_replace("\n", ";", $productos->descripcion);
+
         $destinos = Destino::orderby('nombre','ASC')->get()->pluck('FullDestino','id');
         return view('ingresos.create', compact('proveedors','productos','destinos'));
     }
 
     public function store(IngresoRequest $request)
     {
+        // return $request->all();
         $ingreso = new Ingreso();
+        return $request->all();
         $ingreso->fill($request->all());
         $ingreso->user_id = \Auth::user()->id;
         $ingreso->almacen_id = \Auth::user()->almacen_id;
