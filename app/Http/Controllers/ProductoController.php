@@ -98,6 +98,11 @@ class ProductoController extends Controller
         );
     }
 
+    public function getStock(Request $request){
+        $product = Producto::find($request->id);
+        return $product->stock_actual;
+    }
+
     public function getProducto($id,$c,$p){
         $resultado['producto'] = Producto::find($id)->toArray();
         $resultado['subtotal'] = $c*$p.'';

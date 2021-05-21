@@ -13,6 +13,7 @@ use SIS\Proveedor;
 use SIS\Producto;
 use SIS\DetalleIngreso;
 use SIS\Destino;
+use SIS\Detalle;
 
 use Toastr;
 use Yajra\DataTables\DataTables;
@@ -37,12 +38,12 @@ class IngresoController extends Controller
         else
             $ingresos = Ingreso::with('proveedor')->with('user')->with('destino')->where('user_id',auth()->id())->orderBy('id','DESC')->get();
         return Datatables::of($ingresos)
-                            ->addColumn('action','ingresos.partials.acciones')
-                            ->editColumn('created_at',function($ingreso){
-                                return $ingreso->created_at->format('d/m/Y').'<br>'.$ingreso->created_at->format('h:i:s a');
-                            })
-                            ->rawColumns(['created_at','action'])
-                            ->toJson();
+        ->addColumn('action','ingresos.partials.acciones')
+        ->editColumn('created_at',function($ingreso){
+            return $ingreso->created_at->format('d/m/Y').'<br>'.$ingreso->created_at->format('h:i:s a');
+        })
+        ->rawColumns(['created_at','action'])
+        ->toJson();
     }
 
     public function getDetalleIngreso($id){
@@ -116,31 +117,53 @@ class IngresoController extends Controller
 
     public function store(IngresoRequest $request)
     {
-        // return $request->all();
+        // return $request->producto_id;
+        // return $request->detalles;
+        if (isset($request->detalles)){
+            foreach (json_decode($request->detalles) as $detail) {
+                $detalle = new Detalle();
+                $detalle->tipo = 'I';
+                $detalle->producto_id = $detail->producto_id;
+
+                $producto = Producto::find($detalle->producto_id);
+                $detalle->stock_inicial = $producto->stock_actual;
+                $detalle->saldo_inicial = $producto->saldo_actual;
+                
+                $detalle->cantidad = $detail->cantidad;
+                $detalle->precio = $detail->precio;
+                $detalle->subtotal = $detail->subtotal;
+                
+                $detalle->stock_final = $detalle->stock_inicial + $detalle->cantidad;
+                $detalle->saldo_final = $detalle->saldo_inicial + $detalle->subtotal;
+                // $detalle->save();
+                // return ($detalle);
+            }
+        }
+
         $ingreso = new Ingreso();
-        return $request->all();
         $ingreso->fill($request->all());
         $ingreso->user_id = \Auth::user()->id;
         $ingreso->almacen_id = \Auth::user()->almacen_id;
-        $ingreso->save();
-        $items_id = explode(',',$request->item);
-        $items_cantidad = explode(',',$request->cantidaditem);
-        $items_precio = explode(',',$request->precioitem);
-        $items_subtotal = explode(',',$request->totalitem);
+        return $ingreso;
+        // $ingreso->save();
+        // $items_id = explode(',',$request->item);
+        // $items_cantidad = explode(',',$request->cantidaditem);
+        // $items_precio = explode(',',$request->precioitem);
+        // $items_subtotal = explode(',',$request->totalitem);
 
-        for ($i=0; $i < count($items_id); $i++) {
-            // DETALLE DEL INGRESO
-            $detalle = new DetalleIngreso();
-            $detalle->producto_id = $items_id[$i];
-            $detalle->ingreso_id = $ingreso->id;
-            $detalle->cantidad_ingreso = $items_cantidad[$i];
-            $detalle->precio_ingreso = $items_precio[$i];
-            $detalle->subtotal = $items_subtotal[$i];
-            $detalle->save();
-        }
-        // Ingreso::create($request->all());
-        Toastr::success('Ingreso creado con exito','Correcto!');
-        return redirect()->route('ingresos.index');
+        // for ($i=0; $i < count($items_id); $i++) {
+        //     // DETALLE DEL INGRESO
+        //     $detalle = new DetalleIngreso();
+        //     $detalle->producto_id = $items_id[$i];
+        //     $detalle->ingreso_id = $ingreso->id;
+        //     $detalle->cantidad_ingreso = $items_cantidad[$i];
+        //     $detalle->precio_ingreso = $items_precio[$i];
+        //     $detalle->subtotal = $items_subtotal[$i];
+        //     $detalle->save();
+        // }
+        // // Ingreso::create($request->all());
+        // Toastr::success('Ingreso creado con exito','Correcto!');
+        // return redirect()->route('ingresos.index');
     }
 
     public function show($id)

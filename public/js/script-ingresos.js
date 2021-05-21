@@ -10,32 +10,32 @@ $(function(){
     //alert(direccion);
     
     //Obtener la cantidad en stock del producto
-    $('#producto_id').change(function(e){
-        e.preventDefault();
-        $("#valoresproducto").removeClass('hidden');
-        $('#cantidad_ingreso').val(0);
-        $('#precio_ingreso').val(0);
-        $('#subtotal').val(0);
+    // $('#producto_id').change(function(e){
+    //     e.preventDefault();
+    //     $("#valoresproducto").removeClass('hidden');
+    //     $('#cantidad_ingreso').val(0);
+    //     $('#precio_ingreso').val(0);
+    //     $('#subtotal').val(0);
 
-        var id_item = $('#producto_id').val();
-        var route = direccion1 + '/productos/almacen/'+ id_item +'/cantidad';
-        $.get(route,function(data){
-            $('#cantidad_almacen').val(data);
-        });
-    });
+    //     var id_item = $('#producto_id').val();
+    //     var route = direccion1 + '/productos/almacen/'+ id_item +'/cantidad';
+    //     $.get(route,function(data){
+    //         $('#cantidad_almacen').val(data);
+    //     });
+    // });
     
-    $('#precio_ingreso').change(function(){
-        var id_item = $('#producto_id').val();
-	var cantidad = $('#cantidad_ingreso').val();
-        var precio = $('#precio_ingreso').val();
-	var route = direccion1 + '/productos/listar/' + id_item + '/' + cantidad + '/' + precio + '/producto';
-	$.get(route, function(data){
-		$('#subtotal').val(data.subtotal);
+    $('#precio_ingreso-disabled').change(function(){
+       var id_item = $('#producto_id').val();
+	   var cantidad = $('#cantidad_ingreso').val();
+       var precio = $('#precio_ingreso').val();
+	   var route = direccion1 + '/productos/listar/' + id_item + '/' + cantidad + '/' + precio + '/producto';
+	   $.get(route, function(data){
+	       $('#subtotal').val(data.subtotal);
 	});
         //$('#subtotal').val(cantidad*precio);
     });
 
-    $('#btnagregar').click(function(){
+    $('#btnagregar-disabled').click(function(){
         var id_item = $('#producto_id').val();
 	var cantidad = $('#cantidad_ingreso').val();
 	var precio = $('#precio_ingreso').val();
@@ -55,7 +55,7 @@ $(function(){
         });
     });
 
-    $(document).on('click', '.delete', function (event) {
+    $(document).on('click', '.delete2', function (event) {
         event.preventDefault();
         $(this).closest('tr').remove();
         cantidadTotal = 0;
@@ -76,7 +76,7 @@ $(function(){
         });
     });
 
-    $("#btn-items").click(function () {
+    $("#btn-items-disabled").click(function () {
         var item = [];
         var cantidad = [];
         var preciounitario = [];

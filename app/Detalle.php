@@ -3,10 +3,11 @@
 namespace SIS;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Detalle extends Model
 {
-    protected $fillable = ['tipo', 'ingreso_id', 'salida_id', 'producto_id', 'cantidad', 'precio', 'subtotal', 'stock_final', 'saldo'];
+    protected $fillable = ['tipo', 'ingreso_id', 'salida_id', 'producto_id', 'stock_inicial', 'saldo_inicial', 'cantidad', 'precio', 'subtotal', 'stock_final', 'saldo_final'];
 
     protected $dates = ['deleted_at'];
     use SoftDeletes;

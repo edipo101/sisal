@@ -31,6 +31,10 @@ class Producto extends Model
     	return $this->hasMany(DetalleIngreso::class);
     }
 
+    public function detalles(){
+        return $this->hasMany(Detalle::class);
+    }
+
     public function scopeSearch($query, $buscar){
         return $query->where('nombre','LIKE',"%$buscar%");
     }
@@ -98,6 +102,16 @@ class Producto extends Model
         $cantidad = $this->getCantidadTotalAttribute();
         $preciototal = $precio*$cantidad;
         return $preciototal;
+    }
+
+    public function getStockActualAttribute(){
+        $detail = $this->detalles->last();
+        return (!is_null($detail)) ? $detail->stock_final: 0;
+    }
+
+    public function getSaldoActualAttribute(){
+        $detail = $this->detalles->last();
+        return (!is_null($detail)) ? $detail->saldo_final: 0;
     }
 
     public function getTotalActualAttribute(){

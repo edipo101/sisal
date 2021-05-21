@@ -11,7 +11,8 @@
 		{{-- {{ Form::select('producto_id',$productos,null,['class'=> 'form-control select','id' => 'producto_id', 'placeholder' => 'Seleccione un Producto']) }} --}}
 	</div>
 </div>
-<div class="hidden" id="valoresproducto">
+{{-- <div class="hidden" id="valoresproducto"> --}}
+<div id="valoresproducto">
 	<div class="col-md-3">
 		<div class="form-group">
 			{{ Form::label('cantidad_almacen', 'Cantidad en Almacen') }}
@@ -21,24 +22,19 @@
 	<div class="col-md-3">
 		<div class="form-group">
 			{{ Form::label('cantidad_ingreso', 'Cantidad Ingreso') }}
-			{{ Form::text('cantidad_ingreso',null,['class'=> 'form-control','id' => 'cantidad_ingreso']) }}
+			{{ Form::number('cantidad_ingreso', 5, ['class'=> 'form-control','id' => 'cantidad_ingreso']) }}
 		</div>
 	</div>
 	<div class="col-md-3">
 		<div class="form-group">
-			{{ Form::label('precio_ingreso', 'Precio Unitario') }}
-			{{ Form::text('precio_ingreso',null,['class'=> 'form-control','id' => 'precio_ingreso']) }}
+			{{ Form::label('precio_ingreso', 'Precio Unitario (Bs)') }}
+			{{ Form::number('precio_ingreso', 10, ['class'=> 'form-control','id' => 'precio_ingreso']) }}
 		</div>
 	</div>
-	<div class="col-md-2">
-		<div class="form-group">
-			{{ Form::label('subtotal', 'Subtotal') }}
-			{{ Form::text('subtotal',null,['class'=> 'form-control','id' => 'subtotal', 'readonly'=>'readonly']) }}
-		</div>
-	</div>
+
 	<div class="col-md-1">
 		<div class="form-group">
-			<a href="#" id="btnagregar" class="btn btn-success" style="margin-top: 24px; "><i class="fa fa-plus"></i></a>
+			<button id="btnagregar" class="btn btn-success" style="margin-top: 24px; "><i class="fa fa-plus"></i> Agregar</button> 
 		</div>
 	</div>	
 </div>
@@ -67,7 +63,4 @@
     <input type="hidden" id="cantidaditem" name="cantidaditem" value="">
     <input type="hidden" id="precioitem" name="precioitem" value="">
     <input type="hidden" id="totalitem" name="totalitem" value="">
-</div>
-<div class="text-center">
-    <input type="button" class="btn btn-info text-center" id="btn-items" value="CONFIRMAR PRODUCTOS">
 </div>
