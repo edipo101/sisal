@@ -23,7 +23,7 @@ class CreateIngresosTable extends Migration
             $table->string('preventivo');
             $table->double('cantidad');
             $table->double('total');
-            $table->mediumText('observacion');
+            $table->mediumText('observacion')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

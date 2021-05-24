@@ -24,9 +24,10 @@ class IngresoRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'proveedor_id' => 'required',
-            // 'orden' => 'required',
-            // 'preventivo' => 'required',
+            'proveedor_id' => 'required',
+            'destino_id' => 'required',
+            'orden' => 'required',
+            'preventivo' => 'required',
             // 'cantidad' => 'required',
             // 'total' => 'required',
         ];

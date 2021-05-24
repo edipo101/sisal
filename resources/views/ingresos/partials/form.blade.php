@@ -62,6 +62,6 @@
 </div>
 
 <div class="form-group text-center">
-	{{ Form::submit('Guardar', ['class'=>'btn btn-sm btn-primary']) }}
+	{{ Form::submit('Guardar', ['class'=>'btn btn-sm btn-primary', 'id' => 'btn-save', 'disabled' => 'disabled']) }}
 	<a href="{{ route('ingresos.index') }}" class="btn btn-default">Atras</a>
 </div>

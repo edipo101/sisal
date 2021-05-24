@@ -130,6 +130,11 @@ Ingresos
 
 			$('#cantidad').val(totalQuantity);
 			$('#total').val(subTotal);
+			
+			if (rows.length > 0)
+				$('#btn-save').removeAttr('disabled');
+			else
+				$('#btn-save').attr('disabled', 'disabled');
 		}
 
 		$(document).on('click', '.delete', function(){

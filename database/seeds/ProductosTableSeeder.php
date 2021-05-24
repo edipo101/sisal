@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use SIS\Producto;
 
 class ProductosTableSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class ProductosTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(SIS\Producto::class,500)->create();
+        factory(Producto::class, 20)->create();
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use SIS\Http\Requests;
 use SIS\Http\Requests\IngresoRequest;
 
+use DB;
 use SIS\Ingreso;
 use SIS\Almacen;
 use SIS\Proveedor;
@@ -117,52 +118,46 @@ class IngresoController extends Controller
 
     public function store(IngresoRequest $request)
     {
-        // return $request->producto_id;
         // return $request->all();
-        if (isset($request->detalles)){
-            foreach (json_decode($request->detalles) as $detail) {
-                $detalle = new Detalle();
-                $detalle->tipo = 'I';
-                $detalle->producto_id = $detail->id;
+        try {
+            DB::beginTransaction();
+            
+            $ingreso = new Ingreso();
+            $ingreso->fill($request->all());
+            $ingreso->user_id = \Auth::user()->id;
+            $ingreso->almacen_id = \Auth::user()->almacen_id;            
+            $ingreso->save();
 
-                $producto = Producto::find($detalle->producto_id);
-                $detalle->stock_inicial = $producto->stock_actual;
-                $detalle->saldo_inicial = $producto->saldo_actual;
-                
-                $detalle->cantidad = $detail->quantity;
-                $detalle->precio = $detail->price;
-                $detalle->subtotal = $detail->subtotal;
-                
-                $detalle->stock_final = $detalle->stock_inicial + $detalle->cantidad;
-                $detalle->saldo_final = $detalle->saldo_inicial + $detalle->subtotal;
-                // $detalle->save();
-                echo ($detalle);
-            }
+            if (isset($request->detalles)){
+                foreach (json_decode($request->detalles) as $detail) {
+                    $detalle = new DetalleIngreso();
+                    $detalle->ingreso_id = $ingreso->id;
+                    $detalle->producto_id = $detail->id;
+
+                    $producto = Producto::find($detalle->producto_id);
+                    $detalle->stock_inicial = $producto->stock_actual;
+                    $detalle->saldo_inicial = $producto->saldo_actual;
+                    
+                    $detalle->cantidad = $detail->quantity;
+                    $detalle->precio = $detail->price;
+                    $detalle->subtotal = $detail->subtotal;
+                    
+                    $detalle->stock_ingreso = $detalle->stock_inicial + $detalle->cantidad;
+                    $detalle->save();
+                    echo ($detalle);
+                }
+            }    
+
+            DB::commit();
+            Toastr::success('Ingreso creado con exito','Correcto!');
+            // return 'error en el registro de datos';
+            return $ingreso;
+        } catch (Exception $e) {
+            DB::rollBack();
+            Toastr::error('Error con el registro de datos','Error de registro!');
+            return 'error en el registro de datos';
         }
 
-        $ingreso = new Ingreso();
-        $ingreso->fill($request->all());
-        $ingreso->user_id = \Auth::user()->id;
-        $ingreso->almacen_id = \Auth::user()->almacen_id;
-        return $ingreso;
-        // $ingreso->save();
-        // $items_id = explode(',',$request->item);
-        // $items_cantidad = explode(',',$request->cantidaditem);
-        // $items_precio = explode(',',$request->precioitem);
-        // $items_subtotal = explode(',',$request->totalitem);
-
-        // for ($i=0; $i < count($items_id); $i++) {
-        //     // DETALLE DEL INGRESO
-        //     $detalle = new DetalleIngreso();
-        //     $detalle->producto_id = $items_id[$i];
-        //     $detalle->ingreso_id = $ingreso->id;
-        //     $detalle->cantidad_ingreso = $items_cantidad[$i];
-        //     $detalle->precio_ingreso = $items_precio[$i];
-        //     $detalle->subtotal = $items_subtotal[$i];
-        //     $detalle->save();
-        // }
-        // // Ingreso::create($request->all());
-        // Toastr::success('Ingreso creado con exito','Correcto!');
         // return redirect()->route('ingresos.index');
     }
 
