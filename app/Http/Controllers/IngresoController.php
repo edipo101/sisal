@@ -118,25 +118,25 @@ class IngresoController extends Controller
     public function store(IngresoRequest $request)
     {
         // return $request->producto_id;
-        // return $request->detalles;
+        // return $request->all();
         if (isset($request->detalles)){
             foreach (json_decode($request->detalles) as $detail) {
                 $detalle = new Detalle();
                 $detalle->tipo = 'I';
-                $detalle->producto_id = $detail->producto_id;
+                $detalle->producto_id = $detail->id;
 
                 $producto = Producto::find($detalle->producto_id);
                 $detalle->stock_inicial = $producto->stock_actual;
                 $detalle->saldo_inicial = $producto->saldo_actual;
                 
-                $detalle->cantidad = $detail->cantidad;
-                $detalle->precio = $detail->precio;
+                $detalle->cantidad = $detail->quantity;
+                $detalle->precio = $detail->price;
                 $detalle->subtotal = $detail->subtotal;
                 
                 $detalle->stock_final = $detalle->stock_inicial + $detalle->cantidad;
                 $detalle->saldo_final = $detalle->saldo_inicial + $detalle->subtotal;
                 // $detalle->save();
-                // return ($detalle);
+                echo ($detalle);
             }
         }
 

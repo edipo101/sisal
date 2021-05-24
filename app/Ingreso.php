@@ -41,8 +41,4 @@ class Ingreso extends Model
         return $query->where('orden','LIKE',"%$buscar%")
                     ->orWhere('preventivo','LIKE',"%$buscar%");
     }
-
-    public function setObservacionAttribute($value){
-        $this->attributes['observacion']= $value==null ? 'Sin Observaciones' : $value;
-    }
 }

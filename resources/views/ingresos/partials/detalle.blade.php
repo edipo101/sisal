@@ -48,9 +48,9 @@
         <thead class="bg-navy">
             <tr>
                 <th>ID</th>
-                <th>Nombre</th>
-                <th>Cantidad</th>
+                <th style="width: 50%">Nombre</th>
                 <th>Precio Unitario</th>
+                <th>Cantidad</th>
                 <th>Subtotal</th>
                 <th>Accion</th>
             </tr>
@@ -58,9 +58,15 @@
         <tbody id="detalleproducto">
             {{-- Aqui se cargar los productos por ajax --}}
         </tbody>
+        <tfoot id="table-foot">
+        	<tr style="background-color: #eee; font-weight: bold;">
+        		<td colspan="3" style="text-align: left;">TOTAL</td>
+        		<td style="text-align: right;"></td>
+        		<td style="text-align: right;"></td>
+        	</tr>
+        </tfoot>
     </table>
-    <input type="hidden" id="item" name="item" value="">
-    <input type="hidden" id="cantidaditem" name="cantidaditem" value="">
-    <input type="hidden" id="precioitem" name="precioitem" value="">
-    <input type="hidden" id="totalitem" name="totalitem" value="">
+    {{-- <input type="hidden" id="item" name="item" value=""> --}}
+    <input type="hidden" id="cantidad" name="cantidad" value="">
+    <input type="hidden" id="total" name="total" value="">
 </div>

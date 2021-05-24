@@ -43,7 +43,7 @@ Ingresos
 
 @section('scripts')
 <script src="{{ asset('plugins/select2/js/select2.js') }}"></script>
-<script src="{{asset('js/script-ingresos.js')}}"></script>
+{{-- <script src="{{asset('js/script-ingresos.js')}}"></script> --}}
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -93,8 +93,8 @@ Ingresos
 					
 				$('#cantidad_ingreso').val('');
 				$('#precio_ingreso').val('');
-				}
-			});
+			}
+		});
 
 		function updateProduct(product, quantity){
 			for (let i = 0; i < rows.length; i++) {
@@ -115,24 +115,30 @@ Ingresos
 					"<tr data-id = '"+value.id+"'>"+
 					"<td>"+value.id+"</td>"+
 					"<td style='text-align: left'>"+value.name+"</td>"+
-					"<td>"+value.quantity+"</td>"+
-					"<td>"+value.price+"</td>"+
-					"<td>"+value.subtotal+"</td>"+
-					'<td><button type="button" class="btn btn-danger btn-xs otro"><i class="fa fa-remove"></i> Eliminar</button></td>'+
+					"<td style='text-align: right;'>"+value.price.toFixed(2)+"</td>"+
+					"<td style='text-align: right;'>"+value.quantity+"</td>"+
+					"<td style='text-align: right;'>"+value.subtotal.toFixed(2)+"</td>"+
+					'<td><button type="button" class="btn btn-danger btn-xs delete"><i class="fa fa-remove"></i> Eliminar</button></td>'+
 					"</tr>"
 				);
 				totalQuantity += value.quantity;
 				subTotal += value.subtotal;
 			});
+			$('#table-foot tr').find("td:eq(1)").text(totalQuantity);
+			$('#table-foot tr').find("td:eq(2)").text(subTotal.toFixed(2));
+			// $('#total').text(subTotal);
+
 			$('#cantidad').val(totalQuantity);
 			$('#total').val(subTotal);
 		}
 
-		$('.otro').on("click", function(e) {
-			e.preventDefault();
-			console.log('eliminar');
-			// console.log($(this).parent().parent().data('id'));
-   			// $(this).parent().remove();
+		$(document).on('click', '.delete', function(){
+			let product_id = $(this).parent().parent().data('id');
+			let product = rows.find(prod => prod.id === product_id); 
+			let index = rows.indexOf(product);
+			rows.splice(index, 1);
+   		$(this).closest("tr").remove();
+   		refreshTable();
 		});
 
 		function validateFields(){
@@ -148,13 +154,13 @@ Ingresos
 		function setDetails(){
 			str_details = JSON.stringify(rows);
 	    	$('#details').val(str_details);
-	    	console.log($('#details').val());
-	    }
+	    	// console.log($('#details').val());
+	  }
 
-	    $('#form_ingreso').submit(function(e){
-	    	setDetails();
-	    	return false;
-	    });
+    $('#form_ingreso').submit(function(e){
+    	setDetails();
+    	return true;
+    });
 
 
 	});	
