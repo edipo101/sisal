@@ -54,7 +54,7 @@
             </div>
             <div class="col-md-6">
                 <p>
-                    <strong>Precio Total:</strong> {{ number_format($ingreso->total,2) }} <span class="label label-success">Bs.</span>
+                    <strong>Precio Total:</strong> {{ number_format($ingreso->total,2) }}
                 </p>
             </div>
         </div>
@@ -70,29 +70,37 @@
                 </p>
             </div>
         </div>
-        <h4 class="text-center">Detalle de los Productos Ingresados</h4>
+        <h4 class="text-center">Detalle de productos ingresados</h4>
         <table class="table table-striped table-hover">
             <thead>
                 <tr class="info">
-                    <th width="10px">ID</th>
+                    <th width="10px">Id</th>
                     <th>Producto</th>
-                    <th>Cantidad Ingreso</th>
-                    <th>Precio Ingreso</th>
-                    <th>Subtotal</th>
+                    <th class="text-right">Precio</th>
+                    <th class="text-right">Cantidad</th>
+                    <th class="text-right">Subtotal</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($ingreso->detalleingresos as $detalle)
+                @foreach($ingreso->detalle_ingresos as $detalle)
                 <tr>
                     <td>{{ $detalle->producto->id }}</td>
-                    <td>{{ $detalle->producto->nombre }}</td>
-                    <td>{{ $detalle->cantidad_ingreso }}</td>
-                    <td>{{ number_format($detalle->precio_ingreso,2) }} <span class="label label-success">Bs.</span></td>
-                    <td>{{ number_format($detalle->subtotal,2) }} <span class="label label-success">Bs.</span></td>
+                    <td>{{ $detalle->producto->nombre_descripcion }}</td>
+                    <td class="text-right">{{ number_format($detalle->precio, 2) }}</td>
+                    <td class="text-right">{{ number_format($detalle->cantidad, 2) }}</td>
+                    <td class="text-right">{{ number_format($detalle->subtotal, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr style="background-color: #eee; font-weight: bold;">
+                    <td colspan="3">TOTAL</td>
+                    <td class="text-right">{{number_format($ingreso->cantidad, 2)}}</td>
+                    <td class="text-right">{{number_format($ingreso->total, 2)}}</td>
+                </tr>
+            </tfoot>
         </table>
+        <p></p>
         <a href="{{ route('ingresos.reporteingreso',$ingreso->id) }}" class="btn btn-primary" target="_blank" onclick="window.open(this.href, this.target, 'width=800,height=600'); return false;">
                             <i class="fa fa-print"></i> Imprimir Reporte
                         </a>

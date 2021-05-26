@@ -101,15 +101,18 @@ class Producto extends Model
     }
 
     public function getStockActualAttribute(){
-        // $details = $this->detalle_ingresos;
-        // return (!is_null($details)) ? $details->->sum('stock_ingreso'): 0;
+        $details = $this->detalle_ingresos;
+        return (!is_null($details)) ? $details->sum('stock_ingreso'): 0;
         return 0;
     }
 
     public function getSaldoActualAttribute(){
-        // $detail = $this->detalles->last();
-        // return (!is_null($detail)) ? $detail->saldo_final: 0;
-        return 0;
+        $details = $this->detalle_ingresos;
+        if (is_null($details)) return 0;
+        else
+            return $details->sum(function($product){
+                return $product->precio * $product->stock_ingreso;
+            });
     }
 
     public function getTotalActualAttribute(){

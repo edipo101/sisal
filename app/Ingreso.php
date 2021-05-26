@@ -33,8 +33,8 @@ class Ingreso extends Model
     	return $this->belongsTo(Destino::class);
     }
 
-    public function detalles(){
-    	return $this->hasMany(Detalle::class);
+    public function detalle_ingresos(){
+    	return $this->hasMany(DetalleIngreso::class);
     }
 
     public function scopeSearch($query, $buscar){

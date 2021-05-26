@@ -142,7 +142,7 @@ class IngresoController extends Controller
                     $detalle->precio = $detail->price;
                     $detalle->subtotal = $detail->subtotal;
                     
-                    $detalle->stock_ingreso = $detalle->stock_inicial + $detalle->cantidad;
+                    $detalle->stock_ingreso = $detalle->cantidad;
                     $detalle->save();
                     echo ($detalle);
                 }
@@ -151,14 +151,14 @@ class IngresoController extends Controller
             DB::commit();
             Toastr::success('Ingreso creado con exito','Correcto!');
             // return 'error en el registro de datos';
-            return $ingreso;
+            // return $ingreso;
         } catch (Exception $e) {
             DB::rollBack();
             Toastr::error('Error con el registro de datos','Error de registro!');
-            return 'error en el registro de datos';
+            // return 'error en el registro de datos';
         }
 
-        // return redirect()->route('ingresos.index');
+        return redirect()->route('ingresos.index');
     }
 
     public function show($id)
