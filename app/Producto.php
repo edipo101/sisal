@@ -72,23 +72,12 @@ class Producto extends Model
     }
 
     public function stock_almacen($almacen_id){
-        $details = $this->detalle_ingresos;
-        if (is_null($details)) return 0;
-        else{
-            // return ($details);
-            $sum = 0;
-            foreach ($details as $detail) {
-                return ($detail->ingreso;
-            }
-            return $details->sum(function($detail){
-                $ingreso = $detail->ingreso;
-                dd($ingreso);
-                return $ingreso->almacen_id;
-                // print_r($detail->ingreso);
-                // return $detail->ingreso['almacen_id'];
-                // return ($detail->ingreso->almacen_id == $almacen_id) ? $detail->stock_ingreso : 0;
-            });
+        $sum = 0;
+        foreach ($this->detalle_ingresos as $detail) {
+            if ($detail->ingreso->almacen_id == $almacen_id)
+                $sum += $detail->stock_ingreso;
         }
+        return $sum;
     }
 
     public function getPrecioUnitarioAttribute(){

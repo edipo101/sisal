@@ -66,16 +66,16 @@
         serverSide: true,
         ajax: '{!! route('ingresos.apiIngresos') !!}',
         columns: [
-			{data: 'id'},
+			{data: 'id', className: 'text-right'},
 			{data: 'created_at'},
-			{data: 'orden'},
-			{data: 'preventivo'},
+			{data: 'orden', className: 'text-right'},
+			{data: 'preventivo', className: 'text-right'},
 			{data: 'destino.nombre'},
 			//{data: 'proveedor.nombre'},
-			{data: 'cantidad'},
-			{data: 'total'},
+			{data: 'cantidad', className: 'text-right'},
+			{data: 'total', className: 'text-right'},
 			{data: 'user.nombre'},
-            { data: 'action', orderable: false, searchable: false},
+            {data: 'action', orderable: false, searchable: false},
         ],
     });
     

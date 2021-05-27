@@ -2,74 +2,70 @@
 <div class="col-md-12">
 	<div class="form-group">
 		{{ Form::label('producto_id', 'Producto') }}
-		{{ Form::select('producto_id',$productos,null,['class'=> 'form-control select','id' => 'producto_id', 'placeholder' => 'Seleccione un Producto']) }}
+		<select class="form-control select" id="producto_id" name="producto_id">
+			<option selected="selected" value="">Seleccione un Producto</option>
+			@foreach($productos as $producto)
+			<option value="{{$producto->id}}">{{$producto->nombre_descripcion}}</option>
+			@endforeach
+		</select>
 	</div>
 </div>
-<div class="hidden" id="valoresproducto">
-	<div class="col-md-2">
+{{-- <div class="hidden" id="valoresproducto"> --}}
+<div id="valoresproducto">
+	<div class="col-md-3">
 		<div class="form-group">
-			{{ Form::label('orden', 'Nro. Orden') }}
-			{{ Form::select('orden',[], null,['class'=> 'form-control orden','id' => 'orden','placeholder'=> 'Nro de Orden']) }}
+			{{ Form::label('cantidad_almacen', 'Cantidad en Almacen') }}
+			{{ Form::text('cantidad_almacen',null,['class'=> 'form-control','id' => 'cantidad_almacen', 'readonly'=>'readonly']) }}
 		</div>
 	</div>
 	<div class="col-md-3">
 		<div class="form-group">
-			{{ Form::label('cantidad_ingreso', 'Cantidad Almacen') }}
-			{{ Form::text('cantidad_ingreso',null,['class'=> 'form-control','id' => 'cantidad_ingreso','readonly'=>'readonly']) }}
-		</div>
-	</div>
-	<div class="col-md-2">
-		<div class="form-group">
-			{{ Form::label('precio_salida', 'Precio') }}
-			{{ Form::text('precio_salida',null,['class'=> 'form-control','id' => 'precio_salida', 'readonly'=>'readonly']) }}
-		</div>
-	</div>
-	<div class="col-md-2">
-		<div class="form-group">
 			{{ Form::label('cantidad_salida', 'Cantidad Salida') }}
-			{{ Form::text('cantidad_salida',null,['class'=> 'form-control','id' => 'cantidad_salida']) }}
+			{{ Form::number('cantidad_salida', null, ['class'=> 'form-control','id' => 'cantidad_salida']) }}
 		</div>
 	</div>
-	<div class="col-md-2">
+	<div class="col-md-3">
 		<div class="form-group">
-			{{ Form::label('subtotal', 'Subtotal') }}
-			{{ Form::text('subtotal',null,['class'=> 'form-control','id' => 'subtotal', 'readonly'=>'readonly']) }}
+			{{ Form::label('precio_salida', 'Precio Unitario (Bs)') }}
+			{{ Form::number('precio_salida', null, ['class'=> 'form-control','id' => 'precio_salida']) }}
 		</div>
 	</div>
+
 	<div class="col-md-1">
 		<div class="form-group">
-			<a href="#" id="btnagregar" class="btn btn-success" style="margin-top: 24px; "><i class="fa fa-plus"></i></a>
+			<button id="btnagregar" class="btn btn-success" style="margin-top: 24px; "><i class="fa fa-plus"></i> Agregar Producto</button> 
 		</div>
 	</div>	
 </div>
 
 {{-- Detalle de los Productos seleccionados --}}
 <div class="col-md-12">
-	<h4 class="text-center">DETALLE DE PRODUCTOS SALIENTES</h4>
+	<h4 class="text-center">DETALLE DE PRODUCTOS</h4>
 </div>
 <div class="col-md-12">
     <table class="table table-bordered table-striped text-center" >
         <thead class="bg-navy">
             <tr>
                 <th>ID</th>
-                <th>Nombre</th>
-                <th>Cantidad</th>
+                <th style="width: 50%">Nombre</th>
                 <th>Precio Unitario</th>
+                <th>Cantidad</th>
                 <th>Subtotal</th>
-                <th>Nro Orden</th>
-                <th width="10px">Accion</th>
+                <th>Accion</th>
             </tr>
         </thead>
         <tbody id="detalleproducto">
             {{-- Aqui se cargar los productos por ajax --}}
         </tbody>
+        <tfoot id="table-foot">
+        	<tr style="background-color: #eee; font-weight: bold;">
+        		<td colspan="3" style="text-align: left;">TOTAL</td>
+        		<td style="text-align: right;"></td>
+        		<td style="text-align: right;"></td>
+        	</tr>
+        </tfoot>
     </table>
-    <input type="hidden" id="item" name="item" value="">
-    <input type="hidden" id="cantidaditem" name="cantidaditem" value="">
-    <input type="hidden" id="precioitem" name="precioitem" value="">
-    <input type="hidden" id="totalitem" name="totalitem" value="">
-    <input type="hidden" id="ordenitem" name="ordenitem" value="">
-</div>
-<div class="text-center">
-    <input type="button" class="btn btn-info text-center" id="btn-items" value="CONFIRMAR PRODUCTOS">
+    {{-- <input type="hidden" id="item" name="item" value=""> --}}
+    <input type="hidden" id="cantidad" name="cantidad" value="">
+    <input type="hidden" id="total" name="total" value="">
 </div>

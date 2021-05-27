@@ -176,6 +176,7 @@ Route::get('productos/lista/{id_almacen}/almacen','ProductoController@getProduct
 //Rutas para los reportes
 // Route::get('productos/almacen/{id}/cantidad', 'ProductoController@getCantidadAlmacen')->name('productos.stock');
 Route::get('productos/almacen/stock', 'ProductoController@getStock')->name('productos.stock');
+Route::get('productos/detalle_ingresos', 'ProductoController@getDetalleIngresos')->name('productos.detalle_ingresos');
 Route::get('productos/listar/{id}/{c}/{p}/producto', 'ProductoController@getProducto');
 Route::get('ingresos/detalle/{id}/ingreso', 'IngresoController@getDetalleIngreso');
 Route::get('ingresos/cantidad/{id}/{idproducto}/producto', 'IngresoController@getProductoCantidad');

@@ -28,7 +28,7 @@ class ProductoController extends Controller
 
     public function index(Request $request)
     {
-        $almacenes = Almacen::orderBy('nombre','ASC')->pluck('nombre','id');  //modif por jose 06102020
+        $almacenes = Almacen::orderBy('nombre','ASC')->pluck('nombre','id');
         $almacenid = auth()->user()->almacen_id;
         return view('productos.index', compact('almacenes','almacenid'));
     }
@@ -38,7 +38,8 @@ class ProductoController extends Controller
         return Datatables::of($productos)
             ->addColumn('action','productos.partials.acciones')
             ->addColumn('cantidadtotal', function($producto){
-                return $producto->stock_almacen(1);
+                return $producto->stock_almacen(auth()->user()->almacen_id);
+                // return $producto->stock_actual;
             })
             ->editColumn('imagen',function($producto){
                 return '<img src="'.asset('/img/productos/'. $producto->imagen).'" class="img-responsive" width="50px">';
@@ -94,6 +95,11 @@ class ProductoController extends Controller
     public function getStock(Request $request){
         $product = Producto::find($request->id);
         return $product->stock_actual;
+    }
+
+    public function getDetalleIngresos(Request $request){
+        $product = Producto::find($request->id);
+        return $product->detalle_ingresos;
     }
 
     public function getProducto($id,$c,$p){

@@ -60,18 +60,12 @@ class SalidaController extends Controller
     public function create()
     {
         $destinos = Destino::orderBy('nombre','ASC')->get()->pluck('fulldestino','id');
-        // $mecanicos = Mecanico::orderBy('nombre','ASC')->get()->pluck('fullnombre','id');
         $funcionarios = Funcionario::orderBy('nombre','ASC')->get()->pluck('fullnombre','id');
-        // $conductors = Conductor::orderBy('nombre','ASC')->get()->pluck('fullnombre','id');
-        //$productos = Producto::orderBy('nombre','ASC')->pluck('nombre','id');
         $detalleingresos = DetalleIngreso::orderBy('id','ASC')->pluck('id','id');
-        $productos = DB::table('productos')
-            ->join('detalle_ingresos', 'productos.id', '=', 'detalle_ingresos.producto_id')
-            ->join('ingresos', 'ingresos.id', '=', 'detalle_ingresos.ingreso_id')
-            ->where('ingresos.almacen_id',auth()->user()->almacen_id)
-            ->pluck('productos.nombre', 'productos.id');
-
+        $productos = Producto::orderBy('nombre','ASC')->get();
+        // return $productos;
         return view('salidas.create', compact('destinos','productos','funcionarios','detalleingresos'));
+        // return view('salidas.create_disabled', compact('destinos','productos','funcionarios','detalleingresos'));
     }
 
     public function store(SalidaRequest $request)

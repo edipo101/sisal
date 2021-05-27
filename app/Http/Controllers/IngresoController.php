@@ -41,7 +41,13 @@ class IngresoController extends Controller
         return Datatables::of($ingresos)
         ->addColumn('action','ingresos.partials.acciones')
         ->editColumn('created_at',function($ingreso){
-            return $ingreso->created_at->format('d/m/Y').'<br>'.$ingreso->created_at->format('h:i:s a');
+            return $ingreso->created_at->format('d/m/Y');
+        })
+        ->editColumn('cantidad', function($ingreso){
+            return number_format($ingreso->cantidad, 2);
+        })
+        ->editColumn('total', function($ingreso){
+            return number_format($ingreso->total, 2);
         })
         ->rawColumns(['created_at','action'])
         ->toJson();
