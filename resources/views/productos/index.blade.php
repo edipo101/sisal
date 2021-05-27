@@ -70,15 +70,14 @@
   $(function () {
     $('#productos').DataTable({
     	language: {
-            url: "{{ asset('plugins/datatables.net/Spanish.json') }}",
-        	searchPlaceholder: "Buscar productos..."
-        },
-        order: [[ 1, "desc" ]],
-        processing: true,
-        serverSide: true,
-		destroy:true,
-        ajax: '{!! route('productos.apiProductos',[]) !!}', 
-        columns: [
+        url: "{{ asset('plugins/datatables.net/Spanish.json') }}",
+      	searchPlaceholder: "Buscar productos..."},
+      order: [[ 1, "desc" ]],
+      processing: true,
+      serverSide: true,
+			destroy: true,
+      ajax: '{!! route('productos.apiProductos') !!}', 
+      columns: [
 			{data: 'id'},
 			{data: 'imagen'},
 			{data: 'nombre'},

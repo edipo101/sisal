@@ -37,6 +37,7 @@ class Producto extends Model
 
     public function getCantidadTotalAttribute(){
        // $ingresos = $this->detalle_ingresos()->sum('cantidad_ingreso'); ///
+        return $this->stock_actual;
         $salidas = 0;
         $i = 0;        
         foreach ($this->detalle_ingresos as $detalle) {
@@ -68,6 +69,26 @@ class Producto extends Model
         }
         $total = $i - $salidas;
         return $total;
+    }
+
+    public function stock_almacen($almacen_id){
+        $details = $this->detalle_ingresos;
+        if (is_null($details)) return 0;
+        else{
+            // return ($details);
+            $sum = 0;
+            foreach ($details as $detail) {
+                return ($detail->ingreso;
+            }
+            return $details->sum(function($detail){
+                $ingreso = $detail->ingreso;
+                dd($ingreso);
+                return $ingreso->almacen_id;
+                // print_r($detail->ingreso);
+                // return $detail->ingreso['almacen_id'];
+                // return ($detail->ingreso->almacen_id == $almacen_id) ? $detail->stock_ingreso : 0;
+            });
+        }
     }
 
     public function getPrecioUnitarioAttribute(){
@@ -103,15 +124,14 @@ class Producto extends Model
     public function getStockActualAttribute(){
         $details = $this->detalle_ingresos;
         return (!is_null($details)) ? $details->sum('stock_ingreso'): 0;
-        return 0;
     }
 
     public function getSaldoActualAttribute(){
         $details = $this->detalle_ingresos;
         if (is_null($details)) return 0;
         else
-            return $details->sum(function($product){
-                return $product->precio * $product->stock_ingreso;
+            return $details->sum(function($detail){
+                return $detail->precio * $detail->stock_ingreso;
             });
     }
 

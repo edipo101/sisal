@@ -33,31 +33,24 @@ class ProductoController extends Controller
         return view('productos.index', compact('almacenes','almacenid'));
     }
 
-    public function apiProductos()
-    {
-        $productos = Producto::with('categoria')->with('umedida')->orderBy('id','DESC')->get();
-        
-        //$productos = \DB::select("CALL proc_stock('2')");
-        /*$productos = DB::table('productos')->join('categorias','productos.categoria_id','=','categorias.id')
-        ->join('umedidas','productos.umedida_id','=','umedidas.id')
-        ->orderBy('productos.id','DESC')->get();*/
-
+    public function apiProductos(){
+        $productos = Producto::with('categoria')->with('umedida')->orderBy('id','DESC')->get();      
         return Datatables::of($productos)
-                            ->addColumn('action','productos.partials.acciones')
-                            ->addColumn('cantidadtotal',function($producto){
-                                return $producto->cantidadtotal;
-                            })
-                            ->editColumn('imagen',function($producto){
-                                return '<img src="'.asset('/img/productos/'. $producto->imagen).'" class="img-responsive" width="50px">';
-                              })
-                            ->editColumn('promedio',function($producto){
-                                return $producto->detalle_ingresos->avg('precio_ingreso')==null ? '0.00' : number_format($producto->detalle_ingresos->avg('precio_ingreso'),2);
-                            })
-                            ->editColumn('umedida.prefijo',function($producto){
-                                return '<span class="label label-primary">'.$producto->umedida->prefijo.'</span>';
-                            })
-                            ->rawColumns(['imagen','umedida.prefijo','action'])
-                            ->toJson();
+            ->addColumn('action','productos.partials.acciones')
+            ->addColumn('cantidadtotal', function($producto){
+                return $producto->stock_almacen(1);
+            })
+            ->editColumn('imagen',function($producto){
+                return '<img src="'.asset('/img/productos/'. $producto->imagen).'" class="img-responsive" width="50px">';
+              })
+            ->editColumn('promedio',function($producto){
+                return $producto->detalle_ingresos->avg('precio_ingreso')==null ? '0.00' : number_format($producto->detalle_ingresos->avg('precio_ingreso'),2);
+            })
+            ->editColumn('umedida.prefijo',function($producto){
+                return '<span class="label label-primary">'.$producto->umedida->prefijo.'</span>';
+            })
+            ->rawColumns(['imagen','umedida.prefijo','action'])
+            ->toJson();
     }
 
     //cargar datatable por almacen
