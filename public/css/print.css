@@ -51,19 +51,22 @@ table.detalle{
 .detalle_head{
 	font-weight: bold;
 	border-bottom: 1px solid black;
+	text-align: center !important;
+	font-size: 12pt;
 }
 
 table.detalle tr.detalle_titulos th{
 	background-color: #dfdfdf;
-	border-bottom: 1px solid black;
-	border-top: 1px solid black;
+	border: 1px solid black;
+	padding: 7px;
 }
 table.detalle tr td{
-	padding-top: 5px;
-	padding-bottom: 10px;
+	padding: 7px;
+	padding-right: 12px;
 	border-right: 1px solid black;
 	border-bottom: 1px solid black;
 	border-top: 1px solid black;
+	text-align: right;
 }
 
 table.fecha{

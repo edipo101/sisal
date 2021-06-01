@@ -47,7 +47,14 @@ class ReporteController extends Controller
 
     public function informeProducto($id){
         $producto = Producto::find($id);
-        $detalleingresos = DetalleIngreso::where('producto_id',$id)->get();
-        return view('reportes.imprimir.informekardex', compact('producto','detalleingresos'));
+        $detalle_ingresos = $producto->detalle_ingresos;
+        $detalle_salidas = $producto->detalle_salidas;
+        $merge = $detalle_ingresos->merge($detalle_salidas);
+        $detalles = $merge->sortBy('created_at');
+        // return $detalles;
+        // return $detalle->first()->detalle_ingreso_id;
+        // $detalle_ingresos = DetalleIngreso::where('producto_id',$id)->get();
+        // return view('reportes.imprimir.invoice', compact('producto'));
+        return view('reportes.imprimir.informekardex', compact('producto','detalles'));
     }
 }

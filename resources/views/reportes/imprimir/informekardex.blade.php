@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Kardex del Producto Nro. {{$producto->id}}</title>
-<link rel="stylesheet" href="{{asset('css/print.css')}}">
+	<link rel="stylesheet" href="{{asset('css/print.css')}}">
 </head>
 <body>
 	<table id="header">
@@ -18,111 +18,104 @@
 		</tr>
 		<tr>
 			<td class="center">
-				<h1>KARDEX DEL PRODUCTO</h1>
+				<h1>KARDEX DE PRODUCTO</h1>
 			</td>
 			<td class="right espacio-right"><strong class="registro">{{$producto->id}}</strong></td>
 		</tr>
-		<tr>
+		{{-- <tr>
 			<td class="center">
 				<h1>FDI - HOTIFRUTICOLA</h1>
 			</td>
 			<td class="right espacio-right"><strong class="gestion">Gestion:{{Carbon\Carbon::now()->year}}</strong></td>
-		</tr>
+		</tr> --}}
 	</table>
 	<table class="datos">
 		<tr>
-			<td><strong>PRODUCTO: </strong></td>
-			<td>{{ $producto->nombre }}</td>
+			<td><strong>PRODUCTO: </strong></td><td colspan="2">{{ $producto->nombre_descripcion }}</td>
+			<td></td>
 		</tr>
 		<tr>
-			<td width="15%"><strong>CANTIDAD: </strong></td>
-			<td width="35%">{{ $producto->cantidadtotal }} {{ $producto->umedida->prefijo }}</td>
-			{{--<td width="20%"><strong>PRECIO UNITARIO: </strong></td>
-			<td width="30%">{{ $producto->detalle_ingresos->avg('precio_ingreso') }} Bs.</td>--}}
+			<td width="15%"><strong>CATEGORIA: </strong></td><td width="35%">{{ $producto->categoria->nombre }}</td>
+			<td></td><td></td>
 		</tr>
 		<tr>
-			<td><strong>TOTAL: </strong></td>
-			<td>{{ $producto->total }} Bs.</td>
-			<td><strong>CATEGORIA: </strong></td>
-			<td>{{ $producto->categoria->nombre }}</td>
+			<td><strong>Unidad de medida: </strong></td><td>{{ $producto->umedida->nombre }} Bs.</td>
+			<td><strong>Stock actual: </strong></td><td>{{ $producto->stock_actual }}</td>
 		</tr>
 	</table>
-	@if ($detalleingresos->count() > 0)
+	
+	@if ($detalles->count() > 0)
 	<table class="detalle">
 		<tr>
-			<td colspan="6" class="detalle_head">MOVIMIENTOS DE INGRESOS DEL PRODUCTO</td>
+			<td colspan="14" class="detalle_head">MOVIMIENTOS DE PRODUCTO</td>
 		</tr>
 		<tbody>
 			<tr class="detalle_titulos">
-				<th>FECHA</th>
-				<th>REGISTRO NRO</th>
-				<th>PROVEEDOR</th>
-				<th>CANTIDAD</th>
-				<th>PRECIO</th>
-				<th>SALDO</th>
+				<th rowspan="2">Id</th>
+				<th rowspan="2">Fecha</th>
+				<th rowspan="2">Ingreso_id</th>
+				<th rowspan="2">Salida_id</th>
+				<th rowspan="2">Stock inicial</th>
+				<th rowspan="2">Saldo inicial</th>
+				<th colspan="3">INGRESOS</th>
+				<th colspan="3">SALIDAS</th>
+				<th colspan="3">SALDOS</th>
 			</tr>
-			@foreach($detalleingresos as $detalle)
-			 @php
+			<tr class="detalle_titulos">
+				<th>Cantidad</th>
+				<th>Precio</th>
+				<th>Subtotal</th>
+				<th>Cantidad</th>
+				<th>Precio</th>
+				<th>Subtotal</th>
+				<th>Cantidad</th>
+				<th>Importe</th>
+			</tr>
+			@foreach($detalles as $detalle)
+			 {{-- @php
 			 if($detalle->ingreso->almacen_id!=auth()->user()->almacen_id)
 			 	continue;
-			 @endphp
+			 @endphp --}}
 			<tr>
-				<td>{{ $detalle->created_at->format('d/m/Y h:i:s a') }}</td>
 				<td>{{ $detalle->id }}</td>
-                <td>{{ $detalle->ingreso->proveedor->nombre }}</td>
-				<td>{{ $detalle->cantidad_ingreso }} {{$producto->umedida->prefijo}}</td>
-				<td>{{ $detalle->precio_ingreso }} Bs.</td>
-				<td>{{ $detalle->subtotal }} Bs.</td>
+				<td>{{ $detalle->created_at->format('d/m/Y h:i:s a') }}</td>
+				<td>{{ $detalle->ingreso_id }}</td>
+				<td>{{ $detalle->salida_id }}</td>
+				<td>{{number_format($detalle->stock_inicial, 2)}}</td>
+				<td>{{number_format($detalle->saldo_inicial, 2)}}</td>
+				@php 
+				@endphp
+				@if ($detalle->ingreso_id)
+					<td>{{number_format($detalle->cantidad, 2)}}</td>
+					<td>{{number_format($detalle->precio, 2)}}</td>
+					<td>{{number_format($detalle->subtotal, 2)}}</td>
+					@php
+					$stock_final = $detalle->stock_inicial + $detalle->cantidad;
+					$saldo_final = $detalle->saldo_inicial + $detalle->subtotal;
+					@endphp
+					<td></td>
+					<td></td>
+					<td></td>
+				@else 
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>{{number_format($detalle->cantidad, 2)}}</td>
+					<td>{{number_format($detalle->precio, 2)}}</td>
+					<td>{{number_format($detalle->subtotal, 2)}}</td>
+					@php
+					$stock_final = $detalle->stock_inicial - $detalle->cantidad;
+					$saldo_final = $detalle->saldo_inicial - $detalle->subtotal;
+					@endphp
+				@endif
+				<td style="font-weight: bold;">{{number_format($stock_final, 2)}}</td>
+				<td style="font-weight: bold">{{number_format($saldo_final, 2)}}</td>
 			</tr>
 			@endforeach
 		</tbody>
 	</table>
 	@endif
 
-	@foreach($detalleingresos as $detalle)
-	@if ($detalle->detallesalidas->count() > 0)
-	<table class="detalle">
-		<tr>
-			<td colspan="8" class="detalle_head">MOVIMIENTOS DE SALIDA DEL PRODUCTO</td>
-		</tr>
-		<tbody>
-			<tr class="detalle_titulos">
-				<th>FECHA</th>
-				<th>REGISTRO NRO</th>
-				<th>DESTINO</th>
-				<th>FUNCIONARIO</th>
-				{{-- <th>MECANICO</th>
-				<th>CONDUCTOR</th> --}}
-				<th>CANTIDAD</th>
-				<th>PRECIO</th>
-				<th>SALDO</th>
-			</tr>
-				@foreach($detalle->detallesalidas as $detallesalida)
-				@php
-			 if($detallesalida->salida->almacen_id!=auth()->user()->almacen_id)
-			 	continue;
-			 @endphp
-				<tr>
-					<td>{{ $detallesalida->created_at->format('d/m/Y h:i:s a') }}</td>
-					<td>{{ $detallesalida->id }}</td>
-	                <td>{{ $detallesalida->salida->destino->nombre }}</td>
-	                <td>{{ $detallesalida->salida->funcionario->fullnombre }}</td>
-	                {{-- <td>{{ $detallesalida->salida->mecanico->fullnombre }}</td>
-	                <td>{{ $detallesalida->salida->conductor->fullnombre }}</td> --}}
-					<td>{{ $detallesalida->cantidad_salida }} {{$producto->umedida->prefijo}}</td>
-					<td>{{ $detallesalida->precio_salida }} Bs.</td>
-					<td>{{ $detallesalida->subtotal }} Bs.</td>
-				</tr>
-				@endforeach
-		</tbody>
-	</table>
-	@endif
-	@endforeach
-	{{-- <table width="100%" class="fecha">
-		<tr>
-			<td colspan="5" class="right">Fecha impresa: {{Carbon\Carbon::now()->format('d/m/Y h:i:s a')}}</td>
-		</tr>
-	</table> --}}
 </body>
 </html>
 
