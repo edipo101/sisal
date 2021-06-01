@@ -20,4 +20,8 @@ class DetalleIngreso extends Model
 	public function producto(){
 		return $this->belongsTo(Producto::class);
 	}
+
+	public function detalle_salidas(){
+		return $this->hasMany(DetalleSalida::class);
+	}
 }

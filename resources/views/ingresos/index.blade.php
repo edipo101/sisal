@@ -35,15 +35,16 @@
         <table id="ingresos" class="table table-bordered table-striped table-hover">
         	<thead>
         		<tr class="bg-black">
-					<th>ID</th>
+					<th>Id</th>
 					<th>Fecha</th>
-					<th>Nro de Orden</th>
-					<th>Preventivo</th>
-					<th>U. Ejecutora</th>
+					<th width="15px">Nro Orden</th>
+					<th width="15px">Preventivo</th>
+					<th width="25%">Unidad Ejecutora</th>
 					<th>Cantidad</th>
-					<th>P. Total</th>
+					<th>Importe</th>
+					<th>Tipo</th>
 					<th>Usuario</th>
-					<th width="106">&nbsp;</th>
+					<th width="106px">&nbsp;</th>
         		</tr>
         	</thead> 
         </table>
@@ -71,10 +72,10 @@
 			{data: 'orden', className: 'text-right'},
 			{data: 'preventivo', className: 'text-right'},
 			{data: 'destino.nombre'},
-			//{data: 'proveedor.nombre'},
 			{data: 'cantidad', className: 'text-right'},
 			{data: 'total', className: 'text-right'},
-			{data: 'user.nombre'},
+			{data: 'tipo'},
+			{data: 'user.nickname'},
             {data: 'action', orderable: false, searchable: false},
         ],
     });

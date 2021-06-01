@@ -13,8 +13,6 @@ class Salida extends Model
         'user_id',
         'almacen_id',
         'funcionario_id',
-        // 'mecanico_id',
-        // 'conductor_id',
         'cantidad',
         'total',
         'observacion'
@@ -40,8 +38,8 @@ class Salida extends Model
     	return $this->belongsTo(Funcionario::class);
     }
 
-    public function detalles(){
-    	return $this->hasMany(Detalle::class);
+    public function detalle_salidas(){
+    	return $this->hasMany(DetalleSalida::class);
     }
 
     public function scopeSearch($query, $buscar){
@@ -49,6 +47,6 @@ class Salida extends Model
     }
 
     public function setObservacionAttribute($value){
-        $this->attributes['observacion']= $value==null ? 'Sin Observaciones' : $value;
+        $this->attributes['observacion']= $value==null ? 'Ninguno' : $value;
     }
 }

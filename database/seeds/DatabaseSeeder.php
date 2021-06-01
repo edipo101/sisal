@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
 		// $this->call(UmedidasTableSeeder::class);
   //       $this->call(CategoriasTableSeeder::class);
   //       $this->call(AreasTableSeeder::class);
-        $this->call(ProductosTableSeeder::class);
+        // $this->call(ProductosTableSeeder::class);
+      // factory('SIS\Funcionario', 20)->create();
+      // factory('SIS\Categoria', 20)->create();
+      factory('SIS\Destino', 20)->create();
     }
 }

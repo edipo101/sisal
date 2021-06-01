@@ -57,7 +57,7 @@
 			</div>
 			<div class="col-md-6">
 				<p>
-					<strong>Precio Total:</strong> {{ number_format($salida->total,2) }} <span class="label label-success">Bs.</span>
+					<strong>Precio Total:</strong> {{ number_format($salida->total,2) }}
 				</p>
 			</div>
 		</div>
@@ -79,23 +79,31 @@
 				<tr class="info">
 					<th width="10px">ID</th>
 					<th>Producto</th>
-					<th>Cantidad de Salida</th>
-					<th>Precio</th>
-					<th>Subtotal</th>
+					<th class="text-right">Precio</th>
+                    <th class="text-right">Cantidad</th>
+                    <th class="text-right">Subtotal</th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($salida->detallesalidas as $detalle)
+				@foreach($salida->detalle_salidas as $detalle)
 				<tr>
-					<td>{{ $detalle->detalleingreso->producto->id }}</td>
-					<td>{{ $detalle->detalleingreso->producto->nombre }}</td>
-					<td>{{ $detalle->cantidad_salida }}</td>
-					<td>{{ number_format($detalle->precio_salida,2) }} <span class="label label-success">Bs.</span></td>
-					<td>{{ number_format($detalle->subtotal,2) }} <span class="label label-success">Bs.</span></td>
+					<td>{{ $detalle->producto->id }}</td>
+					<td>{{ $detalle->producto->nombre_descripcion }}</td>
+					<td class="text-right">{{ number_format($detalle->cantidad, 2) }}</td>
+					<td class="text-right">{{ number_format($detalle->precio, 2) }}</td>
+					<td class="text-right">{{ number_format($detalle->subtotal,2) }}</td>
 				</tr>
 				@endforeach
 			</tbody>
+			<tfoot>
+                <tr style="background-color: #eee; font-weight: bold;">
+                    <td colspan="3">TOTAL</td>
+                    <td class="text-right">{{number_format($salida->cantidad, 2)}}</td>
+                    <td class="text-right">{{number_format($salida->total, 2)}}</td>
+                </tr>
+            </tfoot>
 		</table>
+		<p></p>
 		<a href="{{ route('salidas.reportesalida',$salida->id) }}" class="btn btn-primary" target="_blank" onclick="window.open(this.href, this.target, 'width=800,height=600'); return false;">
 							<i class="fa fa-print"></i> Imprimir Reporte
 						</a>

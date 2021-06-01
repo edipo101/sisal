@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class DetalleSalida extends Model
 {
     protected $fillable = [
-		'salida_id','detalle_ingreso_id','cantidad_salida','precio_salida','subtotal'
+		'salida_id', 'producto_id', 'stock_inicial', 'saldo_inicial', 'cantidad', 'precio', 'subtotal', 'detalle_ingreso_id'
 	];
 
 	use SoftDeletes;
@@ -16,9 +16,14 @@ class DetalleSalida extends Model
     protected $dates = ['deleted_at'];
 
 	public function salida(){
-    	return $this->belongsTo(Salida::class);
+        return $this->belongsTo(Salida::class);
     }
-    public function detalleingreso(){
-    	return $this->belongsTo(DetalleIngreso::class,'detalle_ingreso_id');
+
+    public function producto(){
+        return $this->belongsTo(Producto::class);
+    }
+
+    public function detalle_ingreso(){
+        return $this->belongsTo(DetalleIngreso::class);
     }
 }

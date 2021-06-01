@@ -40,21 +40,24 @@ class SalidaController extends Controller
         else
             $salidas = Salida::with('destino')->with('funcionario')->with('user')->where('user_id',auth()->id())->orderBy('id','DESC')->get();
         return Datatables::of($salidas)
-                            ->addColumn('action','salidas.partials.acciones')
-                            ->addColumn('funcionario',function($salida){
-                                return $salida->funcionario->fullnombre;
-                            })
-                            ->editColumn('created_at',function($salida){
-                                return $salida->created_at->format('d/m/Y').'<br>'.$salida->created_at->format('h:i:s a');
-                            })
-                            ->editColumn('destino.sigla',function($salida){
-                                return '<span class="label label-primary">'.$salida->destino->sigla.'</span>';
-                            })
-                            ->editColumn('total',function($salida){
-                                return number_format($salida->total,2).'<span class="label label-success">Bs'.'.'.'</span>';
-                            })
-                            ->rawColumns(['created_at','destino.sigla','total','action'])
-                            ->toJson();
+        ->addColumn('action','salidas.partials.acciones')
+        ->addColumn('funcionario',function($salida){
+            return $salida->funcionario->fullnombre;
+        })
+        ->editColumn('created_at',function($salida){
+            return $salida->created_at->format('d/m/Y').'<br>'.$salida->created_at->format('h:i:s a');
+        })
+        ->editColumn('destino.sigla',function($salida){
+            return $salida->destino->upper_nombre;
+        })
+        ->editColumn('cantidad', function($salida){
+            return number_format($salida->cantidad, 2);
+        })
+        ->editColumn('total',function($salida){
+            return number_format($salida->total, 2);
+        })
+        ->rawColumns(['created_at','destino.sigla','total','action'])
+        ->toJson();
     }
 
     public function create()
@@ -70,30 +73,49 @@ class SalidaController extends Controller
 
     public function store(SalidaRequest $request)
     {
-        $salida = new Salida();
-        $salida->fill($request->all());
-        // dd($salida);
-        $salida->user_id = \Auth::user()->id;
-        $salida->almacen_id = \Auth::user()->almacen_id;
-        $salida->save();
-        $items_id = explode(',',$request->item);
-        $items_cantidad = explode(',',$request->cantidaditem);
-        $items_precio = explode(',',$request->precioitem);
-        $items_subtotal = explode(',',$request->totalitem);
-        $items_orden = explode(',',$request->ordenitem);
+        // return $request->all();
+        try {
+            DB::beginTransaction();
+            
+            $salida = new Salida();
+            $salida->fill($request->all());
+            $salida->user_id = \Auth::user()->id;
+            $salida->almacen_id = \Auth::user()->almacen_id;            
+            // return $salida;
+            $salida->save();
 
-        for ($i=0; $i < count($items_id); $i++) {
-            // DETALLE DEL INGRESO
-            $detalle = new DetalleSalida();
-            $detalle->detalle_ingreso_id = $items_orden[$i];
-            $detalle->salida_id = $salida->id;
-            $detalle->cantidad_salida = $items_cantidad[$i];
-            $detalle->precio_salida = $items_precio[$i];
-            $detalle->subtotal = $items_subtotal[$i];
-            $detalle->save();
+            if (isset($request->detalles)){
+                foreach (json_decode($request->detalles) as $detail) {
+                    $detalle = new DetalleSalida();
+                    $detalle->salida_id = $salida->id;
+                    $detalle->producto_id = $detail->id;
+
+                    $producto = Producto::find($detalle->producto_id);
+                    $detalle->stock_inicial = $producto->stock_actual;
+                    $detalle->saldo_inicial = $producto->saldo_actual;
+                    
+                    $detalle->cantidad = $detail->quantity;
+                    $detalle->precio = $detail->price;
+                    $detalle->subtotal = $detail->subtotal;
+                    
+                    $detalle->detalle_ingreso_id = $detail->detalle_ingreso_id;
+                    $detalle->save();
+                    echo($detalle.'<br>');
+
+                    $detalle_ingreso = $detalle->detalle_ingreso;
+                    $detalle_ingreso->stock_ingreso -= $detalle->cantidad;
+                    $detalle_ingreso->save();
+                    echo($detalle_ingreso.'<br>');
+                }
+            }    
+            // return 0;
+            DB::commit();
+            Toastr::success('Registro de salida creado con éxito','Correcto!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Toastr::error('Error con el registro de datos','Error!');
         }
-        // Salida::create($request->all());
-        Toastr::success('Salida creado con exito','Correcto!');
+
         return redirect()->route('salidas.index');
     }
 

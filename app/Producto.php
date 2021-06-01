@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 class Producto extends Model
 {
     protected $fillable = [
-        // 'nro_sigma',
         'nombre',
         'descripcion',
         'categoria_id',
@@ -24,11 +23,17 @@ class Producto extends Model
 	public function umedida(){
     	return $this->belongsTo(Umedida::class);
     }
+
     public function categoria(){
     	return $this->belongsTo(Categoria::class);
     }
+
     public function detalle_ingresos(){
     	return $this->hasMany(DetalleIngreso::class);
+    }
+
+    public function detalle_salidas(){
+        return $this->hasMany(DetalleSalida::class);
     }
 
     public function scopeSearch($query, $buscar){
@@ -108,6 +113,11 @@ class Producto extends Model
         $cantidad = $this->getCantidadTotalAttribute();
         $preciototal = $precio*$cantidad;
         return $preciototal;
+    }
+
+    public function getIngresosConStockAttribute(){
+        $details = $this->detalle_ingresos->where('stock_ingreso', '>', 0);
+        return (!is_null($details)) ? $details : 0;
     }
 
     public function getStockActualAttribute(){

@@ -59,21 +59,21 @@ class ProductoController extends Controller
         $productos = Producto::with('categoria')->with('umedida')->orderBy('id','DESC')->get();
         
         return Datatables::of($productos)
-                            ->addColumn('action','productos.partials.acciones')
-                            ->addColumn('cantidadtotal',function($producto){
-                                return $producto->cantidadtotala;                              
-                            })
-                            ->editColumn('imagen',function($producto){
-                                return '<img src="'.asset('/img/productos/'. $producto->imagen).'" class="img-responsive" width="50px">';
-                              })
-                            ->editColumn('promedio',function($producto){
-                                return $producto->detalle_ingresos->avg('precio_ingreso')==null ? '0.00' : number_format($producto->detalle_ingresos->avg('precio_ingreso'),2);
-                            })
-                            ->editColumn('umedida.prefijo',function($producto){
-                                return '<span class="label label-primary">'.$producto->umedida->prefijo.'</span>';
-                            })
-                            ->rawColumns(['imagen','umedida.prefijo','action'])
-                            ->toJson();
+        ->addColumn('action','productos.partials.acciones')
+        ->addColumn('cantidadtotal',function($producto){
+            return $producto->cantidadtotala;                              
+        })
+        ->editColumn('imagen',function($producto){
+            return '<img src="'.asset('/img/productos/'. $producto->imagen).'" class="img-responsive" width="50px">';
+        })
+        ->editColumn('promedio',function($producto){
+            return $producto->detalle_ingresos->avg('precio_ingreso')==null ? '0.00' : number_format($producto->detalle_ingresos->avg('precio_ingreso'),2);
+        })
+        ->editColumn('umedida.prefijo',function($producto){
+            return '<span class="label label-primary">'.$producto->umedida->prefijo.'</span>';
+        })
+        ->rawColumns(['imagen','umedida.prefijo','action'])
+        ->toJson();
     }
 
     public function getCantidadAlmacen($id){
@@ -99,7 +99,29 @@ class ProductoController extends Controller
 
     public function getDetalleIngresos(Request $request){
         $product = Producto::find($request->id);
-        return $product->detalle_ingresos;
+        if (is_null($product)) 
+            return response()->json([
+                'success' => false,
+                204
+            ]);
+        else {
+            $detalles = DetalleIngreso::
+            where('producto_id', '=', $product->id)
+            ->where('stock_ingreso', '>', 0)
+            ->get();
+
+            return response()->json([
+                'success' => true,
+                'detalles' => $detalles,
+                200
+            ]);
+        }
+        // return $product->detalle_ingresos;
+        // $detalles = $product->detalle_ingresos->filter(function($value){
+        //     return $value->stock_ingreso > 0;
+        // });
+        // return $detalles;
+        // return $product->ingresos_con_stock;
     }
 
     public function getProducto($id,$c,$p){

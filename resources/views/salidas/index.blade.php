@@ -70,10 +70,10 @@
 			{data: 'created_at'},
 			{data: 'destino.sigla'},
 			{data: 'funcionario'},
-			{data: 'cantidad'},
-			{data: 'total'},
+			{data: 'cantidad', className: 'text-right'},
+			{data: 'total', className: 'text-right'},
 			{data: 'observacion'},
-			{data: 'user.nombre'},
+			{data: 'user.nickname'},
             { data: 'action', orderable: false, searchable: false},
         ],
     });

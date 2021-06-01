@@ -86,17 +86,17 @@ Ingresos
 					price: price,
 					subtotal: subtotal
 				}
-				if (!updateProduct(product, quantity)){
+				if (!updateProduct(product)){
 					rows.push(product);
 				}
 				refreshTable();
 					
-				$('#cantidad_ingreso').val('');
-				$('#precio_ingreso').val('');
+				// $('#cantidad_ingreso').val('');
+				// $('#precio_ingreso').val('');
 			}
 		});
 
-		function updateProduct(product, quantity){
+		function updateProduct(product){
 			for (let i = 0; i < rows.length; i++) {
 				if (product.id == rows[i].id){
 					rows.splice(i, 1, product); 
@@ -142,8 +142,7 @@ Ingresos
 			let product = rows.find(prod => prod.id === product_id); 
 			let index = rows.indexOf(product);
 			rows.splice(index, 1);
-   		$(this).closest("tr").remove();
-   		refreshTable();
+   			refreshTable();
 		});
 
 		function validateFields(){

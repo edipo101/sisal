@@ -18,6 +18,7 @@ use SIS\Detalle;
 
 use Toastr;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
 
 use App;
 
@@ -48,6 +49,12 @@ class IngresoController extends Controller
         })
         ->editColumn('total', function($ingreso){
             return number_format($ingreso->total, 2);
+        })
+        ->editColumn('tipo', function($ingreso){
+            return Str::upper($ingreso->observacion);
+        })
+        ->editColumn('destino.nombre', function($ingreso){
+            return $ingreso->destino->upper_nombre;
         })
         ->rawColumns(['created_at','action'])
         ->toJson();
@@ -150,18 +157,15 @@ class IngresoController extends Controller
                     
                     $detalle->stock_ingreso = $detalle->cantidad;
                     $detalle->save();
-                    echo ($detalle);
+                    // echo ($detalle);
                 }
             }    
 
             DB::commit();
             Toastr::success('Ingreso creado con exito','Correcto!');
-            // return 'error en el registro de datos';
-            // return $ingreso;
         } catch (Exception $e) {
             DB::rollBack();
-            Toastr::error('Error con el registro de datos','Error de registro!');
-            // return 'error en el registro de datos';
+            Toastr::error('Error con el registro de datos','Error!');
         }
 
         return redirect()->route('ingresos.index');

@@ -21,16 +21,9 @@
 	<div class="col-md-3">
 		<div class="form-group">
 			{{ Form::label('cantidad_salida', 'Cantidad Salida') }}
-			{{ Form::number('cantidad_salida', null, ['class'=> 'form-control','id' => 'cantidad_salida']) }}
+			{{ Form::number('cantidad_salida', null, ['class'=>'form-control','id'=>'cantidad_salida']) }}
 		</div>
 	</div>
-	<div class="col-md-3">
-		<div class="form-group">
-			{{ Form::label('precio_salida', 'Precio Unitario (Bs)') }}
-			{{ Form::number('precio_salida', null, ['class'=> 'form-control','id' => 'precio_salida']) }}
-		</div>
-	</div>
-
 	<div class="col-md-1">
 		<div class="form-group">
 			<button id="btnagregar" class="btn btn-success" style="margin-top: 24px; "><i class="fa fa-plus"></i> Agregar Producto</button> 
@@ -62,6 +55,7 @@
         		<td colspan="3" style="text-align: left;">TOTAL</td>
         		<td style="text-align: right;"></td>
         		<td style="text-align: right;"></td>
+        		<td></td>
         	</tr>
         </tfoot>
     </table>
